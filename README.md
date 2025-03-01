@@ -75,7 +75,7 @@ Looking forward to feedback and potential improvements!
 
 Реалізація функції на Dart:
 
-`import 'dart:collection';
+import 'dart:collection';
 
 List<Map<String, int>> findShortestPath(List<String> graph, int startX, int startY, int endX, int endY) {
   int rows = graph.length;
@@ -147,4 +147,3 @@ class Node {
   @override
   int get hashCode => x.hashCode ^ y.hashCode;
 }
-`
