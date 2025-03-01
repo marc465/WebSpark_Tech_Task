@@ -75,75 +75,75 @@ Looking forward to feedback and potential improvements!
 
 Реалізація функції на Dart:
 
-import 'dart:collection';
+    import 'dart:collection';
 
-List<Map<String, int>> findShortestPath(List<String> graph, int startX, int startY, int endX, int endY) {
-  int rows = graph.length;
-  int cols = graph[0].length;
+    List<Map<String, int>> findShortestPath(List<String> graph, int startX, int startY, int endX, int endY) {
+        int rows = graph.length;
+        int cols = graph[0].length;
 
-  if (graph[startY][startX] == 'X' || graph[endY][endX] == 'X') {
-    return [];
-  }
-
-  final startNode = Node(startX, startY);
-  Queue<Node> queue = Queue();
-  Set<Node> visited = {};
-  queue.add(startNode);
-  visited.add(startNode);
-
-  List<List<int>> directions = [
-    [0, -1],    //top
-    [1, -1],    //top-right
-    [1, 0],     //right
-    [1, 1],     //down-right
-    [0, 1],     //down
-    [-1, 1],    //down-left
-    [-1, 0],    //left
-    [-1, -1],   //top-left
-  ];
-
-  while (queue.isNotEmpty) {
-    final current = queue.removeFirst();
-
-    if (current.x == endX && current.y == endY) {
-      return current.buildPath();
-    }
-
-    for (var dir in directions) {
-      int newX = current.x + dir[0];
-      int newY = current.y + dir[1];
-      
-      if (newX >= 0 && newX < cols && newY >= 0 && newY < rows && graph[newY][newX] != 'X') {
-        Node neighbor = Node(newX, newY, previous: current);
-        if (!visited.contains(neighbor)) {
-          queue.add(neighbor);
-          visited.add(neighbor);
+        if (graph[startY][startX] == 'X' || graph[endY][endX] == 'X') {
+            return [];
         }
-      }
+
+        final startNode = Node(startX, startY);
+        Queue<Node> queue = Queue();
+        Set<Node> visited = {};
+        queue.add(startNode);
+        visited.add(startNode);
+
+        List<List<int>> directions = [
+            [0, -1],    //top
+            [1, -1],    //top-right
+            [1, 0],     //right
+            [1, 1],     //down-right
+            [0, 1],     //down
+            [-1, 1],    //down-left
+            [-1, 0],    //left
+            [-1, -1],   //top-left
+        ];
+
+        while (queue.isNotEmpty) {
+            final current = queue.removeFirst();
+
+            if (current.x == endX && current.y == endY) {
+                return current.buildPath();
+            }
+
+            for (var dir in directions) {
+                int newX = current.x + dir[0];
+                int newY = current.y + dir[1];
+                
+                if (newX >= 0 && newX < cols && newY >= 0 && newY < rows && graph[newY][newX] != 'X') {
+                    Node neighbor = Node(newX, newY, previous: current);
+                    if (!visited.contains(neighbor)) {
+                        queue.add(neighbor);
+                        visited.add(neighbor);
+                    }
+                }
+            }
+        }
+        return []; // Якщо шлях не знайдено
     }
-  }
-  return []; // Якщо шлях не знайдено
-}
 
-class Node {
-  final int x, y;
-  final Node? previous;
+    class Node {
+        final int x, y;
+        final Node? previous;
 
-  Node(this.x, this.y, {this.previous});
+        Node(this.x, this.y, {this.previous});
 
-  List<Map<String, int>> buildPath() {
-    List<Map<String, int>> path = [];
-    Node? current = this;
-    while (current != null) {
-      path.add({'x': current.x, 'y': current.y});
-      current = current.previous;
+        List<Map<String, int>> buildPath() {
+            List<Map<String, int>> path = [];
+            Node? current = this;
+            while (current != null) {
+            path.add({'x': current.x, 'y': current.y});
+            current = current.previous;
+            }
+            return path.reversed.toList();
+        }
+
+        @override
+        bool operator ==(Object other) => other is Node && x == other.x && y == other.y;
+
+        @override
+        int get hashCode => x.hashCode ^ y.hashCode;
     }
-    return path.reversed.toList();
-  }
-
-  @override
-  bool operator ==(Object other) => other is Node && x == other.x && y == other.y;
-
-  @override
-  int get hashCode => x.hashCode ^ y.hashCode;
-}
